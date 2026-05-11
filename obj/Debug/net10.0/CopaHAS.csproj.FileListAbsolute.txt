@@ -348,3 +348,4 @@ D:\GF3Ai\PAM\CopaApi\obj\Debug\net10.0\refint\CopaHAS.dll
 D:\GF3Ai\PAM\CopaApi\obj\Debug\net10.0\CopaHAS.pdb
 D:\GF3Ai\PAM\CopaApi\obj\Debug\net10.0\CopaHAS.genruntimeconfig.cache
 D:\GF3Ai\PAM\CopaApi\obj\Debug\net10.0\ref\CopaHAS.dll
+D:\GF3Ai\PAM\CopaApi\obj\Debug\net10.0\CopaHAS.sourcelink.json

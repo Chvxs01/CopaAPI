@@ -11,6 +11,7 @@ namespace CopaApi.Models
         public string Nome {get; set;}
         public string Cidade { get; set; }
         public int Capacidade { get; set; }
-
+        public List<Jogo> Jogos { get; set; }
+            = new List<Jogo>();
     }
 }
