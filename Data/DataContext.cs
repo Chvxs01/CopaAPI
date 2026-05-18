@@ -17,6 +17,10 @@ namespace CopaHAS.Data
         }
         public DbSet<Jogador> TB_JOGADORES { get; set; }
         public DbSet<Estadio> TB_ESTADIO { get; set; }
+        public DbSet<Selecao> TB_SELECAO { get; set; }
+        public DbSet<Tecnico> TB_TECNICO { get; set; }
+        public DbSet<Jogo> TB_JOGO { get; set; }
+        public DbSet<JogoSelecao> TB_JOGO_SELECAO { get; set; }
          
 	      
 
@@ -24,7 +28,87 @@ namespace CopaHAS.Data
         {
             modelBuilder.Entity<Jogador>().ToTable("TB_JOGADORES");
             modelBuilder.Entity<Estadio>().ToTable("TB_ESTADIO");
+            modelBuilder.Entity<Selecao>().ToTable("TB_SELECAO");
+            modelBuilder.Entity<Tecnico>().ToTable("TB_TECNICO");
+            modelBuilder.Entity<Jogo>().ToTable("TB_JOGO");
+            modelBuilder.Entity<JogoSelecao>().ToTable("TB_JOGO_SELECAO");
+
+            // SELECAO            
+            modelBuilder.Entity<Selecao>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Pais)
+                      .IsRequired()
+                      .HasMaxLength(100);
+                entity.Property(e => e.Pais)
+                      .IsRequired()
+                      .HasMaxLength(100);
+            });
             
+            // JOGADOR (1:N com Selecao)            
+            modelBuilder.Entity<Jogador>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Nome)
+                      .IsRequired()
+                      .HasMaxLength(100);
+                entity.Property(e => e.Posicao)
+                      .HasMaxLength(50);
+                entity.HasOne(d => d.SelecaoIdNavegacao)
+                      .WithMany(p => p.Jogadores)
+                      .HasForeignKey(d => d.SelecaoId)
+                      .OnDelete(DeleteBehavior.Cascade);
+                      
+            });
+            
+            // TECNICO (1:1 com Selecao)            
+            modelBuilder.Entity<Tecnico>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Nome)
+                      .IsRequired()
+                      .HasMaxLength(100);
+                entity.HasOne(d => d.SelecaoIdNavegacao)
+                      .WithOne(p => p.Tecnico)
+                      .HasForeignKey<Tecnico>(d => d.SelecaoId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+            
+            // ESTADIO            
+            modelBuilder.Entity<Estadio>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Nome)
+                      .IsRequired()
+                      .HasMaxLength(150);
+                entity.Property(e => e.Cidade)
+                      .HasMaxLength(100);
+            });
+            
+            // JOGO (1:N com Estadio)            
+            modelBuilder.Entity<Jogo>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.DataHora)
+                      .IsRequired();
+                entity.HasOne(d => d.EstadioIdNavegacao)
+                      .WithMany(p => p.Jogos)
+                      .HasForeignKey(d => d.EstadioId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+            
+            // JOGO-SELECÕES (N:N)            
+            modelBuilder.Entity<JogoSelecao>(entity =>
+            {
+                entity.HasKey(e => new { e.JogoId, e.SelecaoId });
+                entity.HasOne(d => d.JogoIdNavegacao)
+                      .WithMany(p => p.JogoSelecoes)
+                      .HasForeignKey(d => d.JogoId);
+
+                entity.HasOne(d => d.SelecaoIdNavegacao)
+                      .WithMany(p => p.JogoSelecoes)
+                      .HasForeignKey(d => d.SelecaoId);
+            });
             
                 
 
@@ -58,6 +142,7 @@ namespace CopaHAS.Data
             //Área para futuros inserts no banco de dados a partir de outras classes/objetos
         }
 
+        
         
         
 
